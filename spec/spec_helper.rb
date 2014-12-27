@@ -46,7 +46,8 @@ Spork.prefork do
     config.include Capybara::DSL
     # Disable the old-style object.should syntax.
     config.expect_with :rspec do |c|
-      c.syntax = :expect
+      c.syntax = :should
+#      c.syntax = :expect
     end
   end
 end
