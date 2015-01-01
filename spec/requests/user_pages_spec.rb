@@ -31,9 +31,13 @@ describe "User pages" do
         click_button "Create my account"
         final = User.count
         initial.should eq final
-#        expect(initial).to eq final
+      end
 
-        #expect(page) { click_button submit }.not_to change(User, :count)
+      describe "after submission" do
+        before { click_button submit }
+
+        it { should have_title('Sign up') }
+        it { should have_content('error') }
       end
     end
 
@@ -51,6 +55,20 @@ describe "User pages" do
         final = User.count
         (initial+1).should eq final
 #        expect { click_button submit }.to change(User, :count).by(1)
+      end
+
+      describe "after saving the user" do
+        before { click_button submit }
+        let(:user) { User.find_by(email: 'user@example.com') }
+
+        it { should have_link('Sign out') }
+        it { should have_title(user.name) }
+        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+      end
+
+      describe "followed by signout" do
+        before { click_link "Sign out" }
+        it { should have_link('Sign in') }
       end
     end
   end
